@@ -16,6 +16,7 @@ int main(){
 		renderer.ClearScreen();
 		renderer.DrawLine(x_val/val_scale,20-y_val/val_scale +y_val2/val_scale,20+x_val/val_scale,y_val/val_scale+y_val2/val_scale);
 		renderer.DrawRectFill(20,50,50,20);
+		renderer.DrawCircle(100,40,20);
 		renderer.Render();
 		y_val+=y_inc;
 		y_val2+=y_inc2;

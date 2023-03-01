@@ -100,7 +100,7 @@ namespace ConsoleRenderer {
 		render_buffer[x/2+y/3*scr_width_actual] = 63;
 	}
 
-	void Renderer::plotLineLow(const int x1, const int y1, const int x2, const int y2) const {
+	void Renderer::plot_line_low(const int x1, const int y1, const int x2, const int y2) const {
 		int dx = x2 - x1;
 		int dy = y2 - y1;
 		int yi = 1;
@@ -120,7 +120,7 @@ namespace ConsoleRenderer {
 			}
 		}
 	}
-	void Renderer::plotLineHigh(const int x1, const int y1, const int x2, const int y2) const {
+	void Renderer::plot_line_high(const int x1, const int y1, const int x2, const int y2) const {
 		int dx = x2 - x1;
 		int dy = y2 - y1;
 		int xi = 1;
@@ -144,15 +144,15 @@ namespace ConsoleRenderer {
 	void Renderer::DrawLine(const int x1, const int y1, const int x2, const int y2) const {
 		if (abs(y2 - y1) < abs(x2 - x1)) {
 			if (x1 > x2) {
-				plotLineLow(x2, y2, x1, y1);
+				plot_line_low(x2, y2, x1, y1);
 			} else {
-				plotLineLow(x1, y1, x2, y2);
+				plot_line_low(x1, y1, x2, y2);
 			}
 		} else {
 			if (y1 > y2) {
-				plotLineHigh(x2, y2, x1, y1);
+				plot_line_high(x2, y2, x1, y1);
 			} else {
-				plotLineHigh(x1, y1, x2, y2);
+				plot_line_high(x1, y1, x2, y2);
 			}
 		}
 	}
@@ -169,6 +169,33 @@ namespace ConsoleRenderer {
 			for(int x1 = x+1;x1<x+w-1;x1++) {
 				DrawPoint(x1,y1);
 			}
+		}
+	}
+
+
+	void Renderer::draw_circle(const int xc,const int yc,const int x,const int y) const {
+		DrawPoint(xc+x,yc+y);
+		DrawPoint(xc-x,yc+y);
+		DrawPoint(xc+x,yc-y);
+		DrawPoint(xc-x,yc-y);
+		DrawPoint(xc+y,yc+x);
+		DrawPoint(xc-y,yc+x);
+		DrawPoint(xc+y,yc-x);
+		DrawPoint(xc-y,yc-x);
+	}
+	void Renderer::DrawCircle(const int xc,const int yc,const int r) const {
+		int x = 0;
+		int y = r;
+		int d = 3 - 2*r;
+		draw_circle(xc,yc,x,y);
+		while(y >= x){
+			x++;
+			if(d > 0){
+				y--;
+				d = d + 4 * (x - y) + 10;
+			} else
+				d = d + 4 * x + 6;
+			draw_circle(xc,yc,x,y);
 		}
 	}
 
@@ -191,9 +218,7 @@ namespace ConsoleRenderer {
 
 	void Renderer::ClearScreen() const {
 		ClearRenderBuffer();
-		//SetConsoleCursorPosition(hStdout,{0,0});
-		//system("cls");
-		std::cout << "\x1B[2J\x1B[H"; //clear console screen
+		SetConsoleCursorPosition(hStdout,{0,0});
 	}
 
 }
